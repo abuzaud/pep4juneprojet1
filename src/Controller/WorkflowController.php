@@ -11,5 +11,5 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class WorkflowController extends Controller
 {
-    
+
 }

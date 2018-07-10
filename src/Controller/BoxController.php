@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Workflow\Registry;
 
 class BoxController extends Controller
 {
@@ -23,14 +24,32 @@ class BoxController extends Controller
      * @Route("/boxes", name="box_all")
      * @param Request $request
      * @param EntityManagerInterface $em
+     * @param Registry $workflows
      * @return Response
      */
-    public function listBoxes(Request $request, EntityManagerInterface $em)
+    public function listBoxes(Request $request, EntityManagerInterface $em, Registry $workflows)
     {
+        // On récupère les box
         $boxes = $em->getRepository(Box::class)->findAll();
 
+        // On récupère les workflow de chaque box
+        $boxWorkflow = $workflows->all($boxes);
+
+        // On créé le tableau qui contiendra les box autorisés à être vue
+        $authorizedBoxes = [];
+        foreach ($boxes as $box) {
+            // On récupère le workflow de la box
+            $workflow = $workflows->get($box, 'box_making');
+
+            // Si nous sommes autorisé, on ajoute la box à la vue
+            if ($workflow->can($box, 'add_desc') || $workflow->can($box, 'add_products')) {
+                $authorizedBoxes[] = $box;
+            }
+
+        }
+        // On affiche la page
         return $this->render('boxes/boxes.html.twig', [
-            'boxes' => $boxes
+                'boxes' => $authorizedBoxes
         ]);
     }
 
@@ -44,7 +63,7 @@ class BoxController extends Controller
         $box = $em->getRepository(Box::class)->find($id);
 
         return $this->render('boxes/box.html.twig', [
-            'box' => $box
+                'box' => $box
         ]);
     }
 
@@ -62,8 +81,8 @@ class BoxController extends Controller
         $form = $this->createForm(BoxType::class, $box);
 
         return $this->render('boxes/box_edit.html.twig', [
-            'box' => $box,
-            'form' => $form->createView()
+                'box' => $box,
+                'form' => $form->createView()
         ]);
     }
 
@@ -72,21 +91,26 @@ class BoxController extends Controller
      * @param Request $request
      * @param EntityManagerInterface $em
      * @param BoxRequestHandler $boxRequestHandler
+     * @param Registry $workflow
      * @return Response
      */
-    public function addBox(Request $request, EntityManagerInterface $em, BoxRequestHandler $boxRequestHandler)
+    public function addBox(Request $request, EntityManagerInterface $em, BoxRequestHandler $boxRequestHandler, Registry $workflow)
     {
         // Création de l'objet
         $box = new BoxRequest();
 
         // Création du formulaire
         $form = $this->createForm(BoxType::class, $box)
-            ->handleRequest($request);
+                ->handleRequest($request);
 
         // Vérification des données du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
             // 0n utilise BoxRequestHandler pour valider et persister les infos en bdd
             $box = $boxRequestHandler->handle($box);
+
+            // On change l'état du workflow
+            $workflow = $workflow->get($box);
+            $workflow->apply($box, 'add_products');
 
             // Affichage d'une notification de réussite
             $this->addFlash('notice', 'La box a été correctement créée');
@@ -94,8 +118,25 @@ class BoxController extends Controller
 
 
         return $this->render('boxes/box_new.html.twig', [
-            'box' => $box,
-            'form' => $form->createView()
+                'box' => $box,
+                'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * Fonction permettant d'initialiser toute les box à la transition "add_products" du workflow box_making
+     * @param EntityManagerInterface $em
+     * @param Registry $workflows
+     */
+    public function initAllBoxes(EntityManagerInterface $em, Registry $workflows)
+    {
+        $boxes = $em->getRepository(Box::class)->findAll();
+
+        foreach ($boxes as $box) {
+            $workflow = $workflows->get($box);
+            $workflow->apply($box, 'add_products');
+            $em->persist($box);
+            $em->flush();
+        }
     }
 }

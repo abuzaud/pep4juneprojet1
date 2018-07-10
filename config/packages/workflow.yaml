@@ -1,2 +1,33 @@
 framework:
-    workflows: ~
+    workflows:
+        box_making:
+            type: 'workflow' # or 'state_machine'
+            marking_store:
+                type: 'single_state' # or 'single_state'
+                arguments:
+                    - 'currentPlace'
+            supports:
+                - App\Entity\Box
+            initial_place: empty
+            places:
+                - empty
+                - desc_box
+                - add_products_box
+                - validation_box
+                - ok_box
+            transitions:
+                add_desc:
+                    from: empty
+                    to: desc_box
+                add_products:
+                    from: desc_box
+                    to:   add_products_box
+                validation:
+                    from: add_products_box
+                    to:   validation_box
+                ok:
+                    from: validation_box
+                    to:   ok_box
+                rejected:
+                    from: validation_box
+                    to:   add_products_box
