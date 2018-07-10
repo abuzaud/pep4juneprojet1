@@ -11,7 +11,9 @@
         <div class="col-12">
             <h1 class="text-center">SutekinaBox</h1>
 
+            {% if is_granted(['ROLE_USER', 'ROLE_ADMIN', 'ROLE_MO', 'ROLE_PM', 'ROLE_SUPPLIER']) %}
             <p class="text-center">Bon retour parmis nous, {{ user.firstname }} !</p>
+            {% endif %}
 
             {% if is_granted(['ROLE_USER', 'ROLE_ADMIN', 'ROLE_MO', 'ROLE_PM', 'ROLE_SUPPLIER']) %}
                 <h2>Actualités</h2>
