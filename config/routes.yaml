@@ -8,3 +8,6 @@ accueil:
     defaults:
         route: index
         permanent: true
+
+logout:
+    path: /deconnexion

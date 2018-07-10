@@ -26,16 +26,26 @@ class Product
      */
     private $supplier;
 
+    /**
+     * @return mixed
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return Product
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -43,11 +53,18 @@ class Product
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getSupplier(): ?int
     {
         return $this->supplier;
     }
 
+    /**
+     * @param int $supplier
+     * @return Product
+     */
     public function setSupplier(int $supplier): self
     {
         $this->supplier = $supplier;

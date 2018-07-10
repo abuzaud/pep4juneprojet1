@@ -25,15 +25,15 @@ security:
             form_login:
                 login_path: index_login
                 check_path: index_login
-                username_parameter: app_login[email]
-                password_parameter: app_login[password]
+                username_parameter: index_login[email]
+                password_parameter: index_login[password]
             provider: user_provider
             logout:
                 path: /deconnexion
-                target: /
+                target: /connexion
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-         # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+          - { path: ^/admin, roles: [ROLE_ADMIN, ROLE_USER] }
+          - { path: ^/boxes, roles: [ROLE_PM, ROLE_MO, ROLE_SUPPLIER, ROLE_ADMIN] }

@@ -30,7 +30,7 @@ class SecurityController extends Controller
          */
 
         if($this->getUser()){
-            return $this->redirectToRoute('admin');
+            //return $this->redirectToRoute('admin');
         }
 
         /*
@@ -44,7 +44,6 @@ class SecurityController extends Controller
          * Gestion des erreurs
          */
         $error = $authenticationUtils->getLastAuthenticationError();
-
         /**
          * Transmission à la vue
          */

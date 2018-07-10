@@ -2,12 +2,15 @@
 
 {% block stylesheets %}
     <!-- Online Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i"
+          rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,700" rel="stylesheet">
     <!-- Vender -->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet"/>
     <link href="{{ asset('css/normalize.min.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('css/bootstrap-notifications.min.css') }}" rel="stylesheet"/>
     <!-- Main CSS (SCSS Compile) -->
     <link href="{{ asset('css/main.css') }}" rel="stylesheet"/>
     <!-- JavaScripts -->
@@ -20,7 +23,20 @@
 {% endblock %}
 
 {% block body %}
-    {% block content '' %}
+    {% include 'components/_nav.html.twig' %}
+    {% include  'components/_notices.html.twig' %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-8">
+                {% block content '' %}
+            </div>
+            <div class="col-12 col-md-4">
+                {% include 'components/_sidebar_notifications.html.twig' %}
+            </div>
+        </div>
+
+    </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -31,5 +47,7 @@
 {% endblock %}
 
 {% block final_javascripts %}
-
+    <script>
+        $('.dropdown-toggle').dropdown()
+    </script>
 {% endblock %}

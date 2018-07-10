@@ -34,17 +34,12 @@ Le processus est divisé en plusieurs étapes cruciales :
 
 - Notification
 
-###Service
-
-
 ###Workflow Box
-- **Retrieving** of product list
-  - awaiting product list // from supplier or marketing
-- **Validation** of the **list** // [Purchasing Manager]
-- **Creation** of the Box and **budget** setting*
-- **Reviewing** of the box
-  - awaiting validation // [Marketing Manager]
-- **Validation** of the **box**
-  - awaiting supplier validation
-  - awaiting packing (from supplier)
-- **Box packed** & available for shipping
+- Ajout des produits en base
+- Création d'une box -> marketing
+  * Formulaire pour la description de la box
+  * Ajout des produits à la box
+- Validation de la box
+  * Attente de la validation du responsable des achats
+- Validation du responsable marketing
+- Go

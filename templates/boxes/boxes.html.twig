@@ -1,0 +1,49 @@
+{% extends "layout.html.twig" %}
+{% trans_default_domain 'workflow' %}
+
+{% set active = 'workflow' %}
+
+{% block page_title %}
+    {{ 'boxes.title' | trans }}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <h3>{{ 'Liste des box' | trans }}</h3>
+
+            <table class="table table-hover table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Nombre de produits</th>
+                    <th scope="col">Etat</th>
+                    <th scope="col">Budget</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for box in boxes %}
+                <tr>
+                    <th scope="row"><a href="{{ path('box_one', {id:box.id}) }}">{{ box.id }}</a></th>
+                    <th><a href="{{ path('box_one', {id:box.id}) }}">{{ box.name }}</a></th>
+                    <th>{{ box.products }}</th>
+                    <th>{{ box.currentPlace }}</th>
+                    <th>{{ box.budget }}</th>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block final_javascripts %}
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+{% endblock %}

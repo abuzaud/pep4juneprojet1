@@ -1,0 +1,38 @@
+{% extends "layout.html.twig" %}
+{% trans_default_domain 'workflow' %}
+
+{% set active = 'workflow' %}
+
+{% block page_title %}
+    {{ box.name | trans }}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <h3>{{ box.name }}</h3>
+            <p><a href="{{ path('box_all') }}">{{ 'Revenir à la liste des boxes' | trans }}</a></p>
+            <p><a href="{{ path('box_edit', {id:box.id}) }}">Editer la box</a></p>
+            <table class="table table-hover table-bordered">
+                <tbody>
+                    <tr>
+                        <th>{{ 'ID' }}</th>
+                        <th>{{ box.id }}</th>
+                    </tr>
+                    <tr>
+                        <th>{{ 'Nom' }}</th>
+                        <th>{{ box.name }}</th>
+                    </tr>
+                    <tr>
+                        <th>{{ 'Budget' }}</th>
+                        <th>{{ box.budget }}</th>
+                    </tr>
+                    <tr>
+                        <th>{{ 'Produits' }}</th>
+                        <th></th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

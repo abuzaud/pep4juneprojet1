@@ -1,0 +1,32 @@
+{% extends "layout.html.twig" %}
+
+{% set active = 'home' %}
+
+{% block page_title %}
+    Accueil
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center">SutekinaBox</h1>
+
+            <p class="text-center">Bon retour parmis nous, {{ user.firstname }} !</p>
+
+            {% if is_granted(['ROLE_USER', 'ROLE_ADMIN', 'ROLE_MO', 'ROLE_PM', 'ROLE_SUPPLIER']) %}
+                <h2>Actualités</h2>
+                <p>
+                    Bacon ipsum dolor amet tail chuck pork loin pork turkey kevin jowl bacon leberkas t-bone beef ribs beef. Frankfurter ham drumstick filet mignon, ham hock chuck meatloaf porchetta pancetta landjaeger bacon. Meatball jerky andouille tail ham hock turkey swine. Shoulder frankfurter tongue jowl prosciutto landjaeger buffalo fatback. Shoulder tri-tip alcatra, flank leberkas pig strip steak turkey frankfurter buffalo tongue pork jerky boudin.
+                </p>
+            {% else %}
+                <p class="text-center">
+                    <a href="{{ path('index_login') }}">Veuillez vous connecter pour continuer</a>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block final_javascripts %}
+
+{% endblock %}
