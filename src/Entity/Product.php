@@ -22,6 +22,17 @@ class Product
     private $name;
 
     /**
+     * @ORM\Column(type="text")
+     */
+    private $description;
+
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $reference;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $supplier;

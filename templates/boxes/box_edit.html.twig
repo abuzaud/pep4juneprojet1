@@ -10,6 +10,7 @@
 {% block content %}
     <h3>{{ 'Modification de : ' ~ box.name }}</h3>
     <p><a href="{{ path('box_all') }}">{{ 'Revenir à la liste des boxes' | trans }}</a></p>
+
     {{ form(form) }}
 {% endblock %}
 

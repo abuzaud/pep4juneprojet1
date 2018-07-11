@@ -60,7 +60,6 @@ class User implements UserInterface
 
     /**
      * User constructor.
-     * @param $registrationDate
      */
     public function __construct()
     {

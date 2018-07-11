@@ -8,27 +8,53 @@ namespace App\Controller\Box;
 
 
 use App\Entity\Box;
-use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Workflow\Registry;
+
 
 class BoxRequest
 {
     private $id;
 
+    /**
+     * @Assert\NotBlank(message="Veuillez renseigner un nom")
+     * @var
+     */
     private $name;
 
+    /**
+     * @Assert\NotBlank(message="Veuillez renseigner un budget")
+     * @Assert\Range(
+     *     min="1",
+     *     minMessage="Votre budget est trop faible."
+     * )
+     * @var
+     */
     private $budget;
 
     private $products;
+
+    /**
+     * @Assert\Type("string")
+     * @var
+     */
+    private $description;
+
+    /**
+     * @Assert\Type("string")
+     * @var
+     */
+    private $reference;
 
     private $currentPlace;
 
     /**
      * BoxRequest constructor.
-     * @param $products
+     * @param Registry $workflows
      */
     public function __construct()
     {
-        $this->products = new ArrayCollection();
+        $this->currentPlace = 'empty';
     }
 
 
@@ -112,12 +138,48 @@ class BoxRequest
         $this->currentPlace = $currentPlace;
     }
 
-    public function createFromBoxRequest(Box $box): self
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReference()
+    {
+        return $this->reference;
+    }
+
+    /**
+     * @param mixed $reference
+     */
+    public function setReference($reference): void
+    {
+        $this->reference = $reference;
+    }
+
+
+
+    public function createBoxRequestFromBox(Box $box): self
     {
         $boxRequest = new self();
         $boxRequest->setId($box->getId());
         $boxRequest->setName($box->getName());
         $boxRequest->setBudget($box->getBudget());
+        $boxRequest->setDescription($box->getDescription());
+        $boxRequest->setReference($box->getReference());
         $boxRequest->setProducts($box->getProducts());
         $boxRequest->setCurrentPlace($box->getCurrentPlace());
         return $boxRequest;

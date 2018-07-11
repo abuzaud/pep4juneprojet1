@@ -8,26 +8,38 @@ framework:
                     - 'currentPlace'
             supports:
                 - App\Entity\Box
+                - App\Controller\Box\BoxRequest
             initial_place: empty
             places:
                 - empty
-                - desc_box
-                - add_products_box
+                - desc_incomplete
+                - desc_complete
+                - products_incomplete
+                - products_complete
                 - validation_box
                 - ok_box
             transitions:
-                add_desc:
+                adding_budget:
                     from: empty
-                    to: desc_box
-                add_products:
-                    from: desc_box
-                    to:   add_products_box
+                    to: desc_incomplete
+                adding_desc:
+                    from: desc_incomplete
+                    to: desc_complete
+                desc_ok_from_empty:
+                    from: empty
+                    to: desc_complete
+                adding_products:
+                    from: desc_complete
+                    to:   products_incomplete
+                products_added:
+                    from: products_incomplete
+                    to: products_complete
                 validation:
-                    from: add_products_box
+                    from: products_complete
                     to:   validation_box
                 ok:
                     from: validation_box
                     to:   ok_box
                 rejected:
                     from: validation_box
-                    to:   add_products_box
+                    to:   products_incomplete

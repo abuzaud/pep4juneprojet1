@@ -19,7 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Class BoxType
  * @package App\Form
  */
-class BoxType extends AbstractType
+class BoxProductsType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -29,14 +29,24 @@ class BoxType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'attr' => ['placeholder' => 'Nom']
+                'attr' => ['placeholder' => 'Nom', 'disabled' => 'disabled']
             ])
             ->add('budget', MoneyType::class, [
-                'attr' => ['placeholder' => 'Budget']
+                'attr' => ['placeholder' => 'Budget', 'disabled' => 'disabled']
             ])
-            ->add('submit', SubmitType::class
-            )
-        ;
+            ->add('description', TextType::class, [
+                'attr' => ['placeholder' => 'Description', 'disabled' => 'disabled']
+            ])
+            ->add('reference', TextType::class, [
+                'attr' => ['placeholder' => 'Reference', 'disabled' => 'disabled']
+            ])
+            ->add('products', TextType::class, [
+                'attr' => ['placeholder' => 'Liste de produits']
+            ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'Valider'
+                ]
+            );
     }
 
     /**

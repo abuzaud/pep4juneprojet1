@@ -4,6 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Box;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Parameter;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -14,9 +17,28 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class BoxRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    private $em;
+
+
+    public function __construct(RegistryInterface $registry, EntityManagerInterface $em)
     {
         parent::__construct($registry, Box::class);
+        $this->em = $em;
+    }
+
+    public function findByPlaces(array $places)
+    {
+        $max = count($places);
+
+        $query = $this->createQueryBuilder('b');
+
+        foreach ($places as $i => $place){
+            $query->orWhere("b.currentPlace = :place$i")
+                ->setParameter("place$i", $place);
+        }
+        $query->orderBy('b.id', 'ASC');
+        return $query->getQuery()->execute();
+
     }
 
 //    /**
@@ -32,18 +54,6 @@ class BoxRepository extends ServiceEntityRepository
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Box
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
         ;
     }
     */

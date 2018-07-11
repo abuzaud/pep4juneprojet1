@@ -22,9 +22,19 @@ class Box
     private $name;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="float", nullable=false)
      */
     private $budget;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $reference;
 
     /**
      * @ORM\Column(type="object", nullable=true)
@@ -35,7 +45,21 @@ class Box
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     public $currentPlace;
-    
+
+    public function __construct()
+    {
+        $this->currentPlace = 'empty';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function setId($id): self
+    {
+        $this->id= $id;
+
+        return $this;
+    }
 
     /**
      * @return mixed
@@ -118,6 +142,35 @@ class Box
         return $this;
     }
 
-    
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
 
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReference()
+    {
+        return $this->reference;
+    }
+
+    /**
+     * @param mixed $reference
+     */
+    public function setReference($reference): void
+    {
+        $this->reference = $reference;
+    }
 }

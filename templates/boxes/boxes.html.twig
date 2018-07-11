@@ -7,6 +7,12 @@
     {{ 'boxes.title' | trans }}
 {% endblock %}
 
+{% if is_granted('ROLE_MO') or is_granted('ROLE_ADMIN') %}
+    {% set box_action = 'edit' %}
+{% else %}
+    {% set box_action = 'view' %}
+{% endif %}
+
 {% block content %}
     <div class="row">
         <div class="col-12">
@@ -18,23 +24,54 @@
                     <th scope="col">#</th>
                     <th scope="col">Nom</th>
                     <th scope="col">Nombre de produits</th>
-                    <th scope="col">Etat</th>
                     <th scope="col">Budget</th>
+                    <th scope="col">Etat</th>
+                    <th scope="col">Description</th>
+                    {% if box_action == 'edit' %}
+                        <th scope="col">Produits</th>
+                    {% endif %}
                 </tr>
                 </thead>
                 <tbody>
                 {% for box in boxes %}
-                <tr>
-                    <th scope="row"><a href="{{ path('box_one', {id:box.id}) }}">{{ box.id }}</a></th>
-                    <th><a href="{{ path('box_one', {id:box.id}) }}">{{ box.name }}</a></th>
-                    <th>{{ box.products }}</th>
-                    <th>{{ box.currentPlace }}</th>
-                    <th>{{ box.budget }}</th>
-                </tr>
+                    <tr>
+                        <th scope="row">{{ box.id }}</th>
+                        <th>{{ box.name }}</th>
+                        <th>{{ box.products }}</th>
+                        <th>{{ box.budget }}</th>
+                        <th>{{ box.currentPlace }}</th>
+                        <th>
+
+                            <a href="
+                            {% if box_action == 'edit' %}
+                                {{ path('box_edit', {id:box.id, _action:'description'}) }}
+                            {% else %}
+                                {{ path('box_view', {id:box.id}) }}
+                            {% endif %}
+                            ">
+                                {% if box_action == 'view' %}
+                                    {% set action = 'Voir la box' %}
+                                {% else %}
+                                    {% if box.currentPlace == 'empty' %}
+                                        {% set action = 'Ajouter une description' %}
+                                    {% else %}
+                                        {% set action = 'Modifier la description' %}
+                                    {% endif %}
+                                {% endif %}
+                                {{ action }}
+                            </a>
+                        </th>
+                        {% if (box.currentPlace !='empty') and (box_action == 'edit') %}
+                        <th>
+                            <a href="{{ path('box_edit', {id:box.id, _action:'produits'}) }}">
+                                {{ 'Modifier les produits' | trans }}
+                            </a>
+                        </th>
+                        {% endif %}
+                    </tr>
                 {% endfor %}
                 </tbody>
             </table>
-
         </div>
     </div>
 {% endblock %}
