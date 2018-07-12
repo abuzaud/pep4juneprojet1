@@ -42,13 +42,29 @@ class Box
     private $products;
 
     /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $validate;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $is_sent;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     public $currentPlace;
 
+
+    /**
+     * Box constructor.
+     */
     public function __construct()
     {
-        $this->currentPlace = 'empty';
+        $this->currentPlace = 'edition';
+        $this->validate = false;
+        $this->is_sent = false;
     }
 
     /**
@@ -56,7 +72,7 @@ class Box
      */
     public function setId($id): self
     {
-        $this->id= $id;
+        $this->id = $id;
 
         return $this;
     }
@@ -172,5 +188,51 @@ class Box
     public function setReference($reference): void
     {
         $this->reference = $reference;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsValidate()
+    {
+        return $this->validate;
+    }
+
+    /**
+     * @param mixed $validate
+     */
+    public function setIsValidate($validate): void
+    {
+        $this->validate = $validate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsSent()
+    {
+        return $this->is_sent;
+    }
+
+    /**
+     * @param mixed $is_sent
+     */
+    public function setIsSent($is_sent): void
+    {
+        $this->is_sent = $is_sent;
+    }
+
+    public function isCompleted(){
+        if(
+            !empty($this->getName()) &&
+            !empty($this->getBudget()) &&
+            !empty($this->getReference()) &&
+            !empty($this->getDescription()) &&
+            !empty($this->getProducts())
+        ){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

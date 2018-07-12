@@ -9,37 +9,26 @@ framework:
             supports:
                 - App\Entity\Box
                 - App\Controller\Box\BoxRequest
-            initial_place: empty
+            initial_place: edition
             places:
-                - empty
-                - desc_incomplete
-                - desc_complete
-                - products_incomplete
-                - products_complete
-                - validation_box
-                - ok_box
+                - edition
+                - box_complete
+                - validate
+                - production
+                - sent
             transitions:
-                adding_budget:
-                    from: empty
-                    to: desc_incomplete
-                adding_desc:
-                    from: desc_incomplete
-                    to: desc_complete
-                desc_ok_from_empty:
-                    from: empty
-                    to: desc_complete
-                adding_products:
-                    from: desc_complete
-                    to:   products_incomplete
-                products_added:
-                    from: products_incomplete
-                    to: products_complete
-                validation:
-                    from: products_complete
-                    to:   validation_box
-                ok:
-                    from: validation_box
-                    to:   ok_box
-                rejected:
-                    from: validation_box
-                    to:   products_incomplete
+                datas_added:
+                    from: edition
+                    to: box_complete
+                products_validation:
+                    from: box_complete
+                    to: validate
+                box_production:
+                    from: validate
+                    to: production
+                box_sent:
+                    from: production
+                    to: sent
+                products_missing:
+                    from: box_complete
+                    to: edition

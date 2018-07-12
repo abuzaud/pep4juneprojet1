@@ -1,7 +1,5 @@
 {% extends "layout.html.twig" %}
-{% trans_default_domain 'workflow' %}
-
-{% set active = 'workflow' %}
+{% trans_default_domain 'box' %}
 
 {% block page_title %}
     {{ box.name | trans }}
@@ -12,29 +10,73 @@
         <div class="col-12">
             <h3>{{ box.name }}</h3>
             <p><a href="{{ path('box_all') }}">{{ 'Revenir à la liste des boxes' | trans }}</a></p>
-            {% if  (is_granted('ROLE_MO') == true) %}
+            {% if  (is_granted('ROLE_MO') == true) and (box.currentPlace != 'sent') %}
                 <p><a href="{{ path('box_edit', {id:box.id}) }}">Editer la box</a></p>
             {% endif %}
             <table class="table table-hover table-bordered">
                 <tbody>
                     <tr>
                         <th>{{ 'ID' }}</th>
-                        <th>{{ box.id }}</th>
+                        <td>{{ box.id }}</td>
                     </tr>
                     <tr>
                         <th>{{ 'Nom' }}</th>
-                        <th>{{ box.name }}</th>
+                        <td>{{ box.name }}</td>
                     </tr>
                     <tr>
                         <th>{{ 'Budget' }}</th>
-                        <th>{{ box.budget }}</th>
+                        <td>{{ box.budget }}</td>
                     </tr>
                     <tr>
                         <th>{{ 'Produits' }}</th>
-                        <th></th>
+                        <td>{{ box.products }}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'Etat' }}</th>
+                        <td>{{ box.currentPlace }}</td>
                     </tr>
                 </tbody>
             </table>
+            {% if (box.currentPlace == 'sent') %}
+                <div class="row">
+                    <div class="col-12 text-center lead">
+                        {{ 'Cette box a été expédiée auprès de nos clients.' | trans }}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if is_granted('ROLE_PM') and (box.currentPlace == 'box_complete') %}
+            <div class="row">
+                <div class="col-12 col-sm-6">
+                    <a href="{{ path('box_validate', {id:box.id}) }}">Valider le contenu de la box</a>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <a href="{{ path('box_revision', {id:box.id}) }}">Demander une révision des produits de la box</a>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if is_granted('ROLE_MM') and (box.currentPlace == 'validate')  %}
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+                        <a href="{{ path('box_production', {id:box.id}) }}">Demander la mise en production de la box</a>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <a href="{{ path('box_delete', {id:box.id}) }}">Supprimer la box</a>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if is_granted('ROLE_DIRECTOR') and (box.currentPlace == 'production') %}
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+                        <a href="{{ path('box_sending', {id:box.id}) }}">Ordonner l'expédition de la box</a>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <a href="{{ path('box_delete', {id:box.id}) }}">Supprimer la box</a>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

@@ -15,7 +15,8 @@
 						Box
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-						<a class="dropdown-item" href="{{ path('box_all') }}">Voir toutes les box</a>
+						<a class="dropdown-item" href="{{ path('listboxes') }}">Voir toutes les box</a>
+						<a class="dropdown-item" href="{{ path('box_all') }}">Box de mon workflow</a>
 						{% if is_granted('ROLE_MO') %}
 							<a class="dropdown-item" href="{{ path('box_add') }}">Nouvelle box</a>
 						{% endif %}

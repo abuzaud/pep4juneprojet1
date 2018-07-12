@@ -7,6 +7,7 @@
 namespace App\Controller\Box;
 
 
+use App\Entity\Box;
 use Doctrine\ORM\EntityManagerInterface;
 
 class BoxRequestHandler
@@ -25,7 +26,7 @@ class BoxRequestHandler
      * @param BoxRequest $boxRequest
      * @return \App\Entity\Box
      */
-    public function handle(BoxRequest $boxRequest)
+    public function handleNew(BoxRequest $boxRequest)
     {
         // On utilise la factory pour créer la box
         $box = $this->boxFactory->createFromBoxRequest($boxRequest);
@@ -35,5 +36,15 @@ class BoxRequestHandler
         $this->em->flush();
 
         return $box;
+    }
+
+    public function handleEdit(BoxRequest $boxRequest, Box $box)
+    {
+        $return = $this->boxFactory->modifyFromBoxRequest($boxRequest, $box);
+
+        $this->em->persist($return);
+        $this->em->flush();
+
+        return $return;
     }
 }

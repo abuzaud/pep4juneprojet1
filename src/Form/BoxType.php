@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by Antoine Buzaud.
- * Date: 10/07/2018
+ * Date: 12/07/2018
  */
 
 namespace App\Form;
@@ -15,11 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class BoxType
- * @package App\Form
- */
-class BoxDescType extends AbstractType
+class BoxType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -29,10 +25,12 @@ class BoxDescType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'attr' => ['placeholder' => 'Nom', 'required' => true]
+                'required' => true,
+                'attr' => ['placeholder' => 'Nom']
             ])
             ->add('budget', MoneyType::class, [
-                'attr' => ['placeholder' => 'Budget', 'required' => true]
+                'required' => true,
+                'attr' => ['placeholder' => 'Budget']
             ])
             ->add('description', TextType::class, [
                 'required' => false,
@@ -42,11 +40,14 @@ class BoxDescType extends AbstractType
                 'required' => false,
                 'attr' => ['placeholder' => 'reference']
             ])
+            ->add('products', TextType::class, [
+                'required' => false,
+                'label' => 'Liste des produits'
+            ])
             ->add('submit', SubmitType::class, [
                     'label' => 'Valider'
                 ]
-            )
-        ;
+            );
     }
 
     /**
@@ -65,6 +66,6 @@ class BoxDescType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'box_desc_edit';
+        return 'box_edit';
     }
 }

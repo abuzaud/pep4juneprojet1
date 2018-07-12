@@ -28,11 +28,11 @@ class WorkflowEvents implements EventSubscriberInterface
     public function onNewPlace(Event $event)
     {
         $this->logger->alert(sprintf(
-                'La box "#%d" a effectué la transition "%s" depuis "%s" jusqu\'à "%s"',
-                $event->getSubject()->getId(),
-                $event->getTransition()->getName(),
-                implode(', ', array_keys($event->getMarking()->getPlaces())),
-                implode(', ', $event->getTransition()->getTos())
+            'La box "#%d" a effectué la transition "%s" depuis "%s" jusqu\'à "%s"',
+            $event->getSubject()->getId(),
+            $event->getTransition()->getName(),
+            implode(', ', $event->getTransition()->getFroms()),
+            implode(', ', $event->getTransition()->getTos())
         ));
     }
 
@@ -41,15 +41,25 @@ class WorkflowEvents implements EventSubscriberInterface
      * la place "add_products" ne puissent être vue si la box n'a aucun budget
      * @param GuardEvent $event
      */
-    public function guardAddProducts(GuardEvent $event)
+    public function guardDatasAdded(GuardEvent $event)
     {
         /** @var Box $box */
         $box = $event->getSubject();
         $budget = $box->getBudget();
+        $name = $box->getName();
+        $description = $box->getDescription();
+        $reference = $box->getReference();
+        $products = $box->getProducts();
 
-        if (empty($budget)) {
-            // On bloque les box sans budget
-            $event->setBlocked(TRUE);
+        // Si la fiche de la box n'est pas complète
+        if (empty($budget) ||
+            empty($name) ||
+            empty($description) ||
+            empty($reference) ||
+            empty($products)
+        ) {
+            // On bloque les box
+            $event->setBlocked(true);
         }
     }
 
@@ -61,7 +71,8 @@ class WorkflowEvents implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-                'workflow.box_making.entered' => 'onNewPlace'
+            'workflow.box_making.completed' => 'onNewPlace',
+            'workflow.box_making.datas_added' => 'guardDatasAdded'
         );
     }
 }

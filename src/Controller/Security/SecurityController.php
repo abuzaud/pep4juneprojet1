@@ -11,10 +11,24 @@ use App\Form\LoginType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends Controller
 {
+    private $security;
+
+    /**
+     * SecurityController constructor.
+     * @param Security $security
+     */
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
+
     /**
      * Page de connexion à l'administration
      * @Route("/connexion", name="index_login")
@@ -29,7 +43,7 @@ class SecurityController extends Controller
          * vers l'administration
          */
 
-        if($this->getUser()){
+        if ($this->getUser()) {
             //return $this->redirectToRoute('admin');
         }
 
@@ -37,7 +51,7 @@ class SecurityController extends Controller
          * Création du formulaire de connexion
          */
         $form = $this->createForm(LoginType::class, [
-           'email' => $authenticationUtils->getLastUsername()
+            'email' => $authenticationUtils->getLastUsername()
         ]);
 
         /**

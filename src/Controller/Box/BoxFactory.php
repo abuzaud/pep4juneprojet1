@@ -25,6 +25,8 @@ class BoxFactory
         $box->setProducts($request->getProducts());
         $box->setDescription($request->getDescription());
         $box->setReference($request->getReference());
+        $box->setIsValidate($request->getIsValidate());
+        $box->setIsSent($request->getisSent());
         $box->setCurrentPlace($request->getCurrentPlace());
 
         return $box;
@@ -36,7 +38,7 @@ class BoxFactory
      * @param BoxRequest $request
      * @return Box
      */
-    public function modifyFromBoxRequest(Box $box, BoxRequest $request): Box
+    public function modifyFromBoxRequest(BoxRequest $request, Box $box): Box
     {
         $box->setId($request->getId());
         $box->setName($request->getName());
@@ -44,6 +46,8 @@ class BoxFactory
         $box->setProducts($request->getProducts());
         $box->setDescription($request->getDescription());
         $box->setReference($request->getReference());
+        $box->setIsValidate($request->getIsValidate());
+        $box->setIsSent($request->getisSent());
         $box->setCurrentPlace($request->getCurrentPlace());
 
         return $box;

@@ -1,0 +1,43 @@
+{% extends "layout.html.twig" %}
+{% trans_default_domain 'all.boxes' %}
+
+{% block page_title %}
+    {{ 'all.boxes.title' | trans }}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <h3>{{ 'Liste de toutes les box' | trans }}</h3>
+
+            <table class="table table-hover table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Budget</th>
+                    <th scope="col">Produits</th>
+                    <th scope="col">Etat</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for box in boxes %}
+                    <tr>
+                        <th scope="row">{{ box.id }}</th>
+                        <th scope="row">{{ box.name }}</th>
+                        <th scope="row">{{ box.budget }}</th>
+                        <th scope="row">{{ box.products }}</th>
+                        <th scope="row">{{ box.currentPlace }}</th>
+                        <th class="text-center">
+                            <a href="{{ path('box_view', {id:box.id}) }}">
+                                {{ 'Voir' | trans }}
+                            </a>
+                        </th>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

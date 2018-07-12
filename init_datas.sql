@@ -22,3 +22,11 @@ INSERT INTO `product` (name, supplier, description, reference) VALUES
 ('product_4', 1, 'Meatloaf strip steak fatback hamburger frankfurter kevin. Ground round hamburger ball tip burgdoggen tongue. Kielbasa turkey ham cupim tri-tip andouille ham hock ground round pastrami ribeye. ', 'DEDF4868451'),
 ('product_5', 2, 'Biltong pancetta venison turkey drumstick meatloaf burgdoggen shoulder kielbasa buffalo pork chop short loin flank pork loin. Kevin shoulder cow salami pastrami drumstick pork belly. Short loin ground round spare ribs ham hock, shoulder leberkas brisket swine salami. ', 'SDFE57846923');
 
+INSERT INTO `role` (name, fullname) VALUES
+('ROLE_ADMIN', 'Administrateur'),
+('ROLE_USER', 'Utilisateur'),
+('ROLE_PM', 'Responsable des achats'),
+('ROLE_MO', 'Marketing Officer'),
+('ROLE_MM', 'Marketing Manager'),
+('ROLE_DIRECTOR', 'Directeur'),
+('ROLE_SUPPLIER', 'Supplier');

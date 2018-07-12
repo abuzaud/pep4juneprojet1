@@ -48,13 +48,18 @@ class BoxRequest
 
     private $currentPlace;
 
+    private $validate;
+
+    private $is_sent;
+
     /**
      * BoxRequest constructor.
-     * @param Registry $workflows
      */
     public function __construct()
     {
-        $this->currentPlace = 'empty';
+        $this->currentPlace = 'edition';
+        $this->validate = false;
+        $this->is_sent = false;
     }
 
 
@@ -170,7 +175,37 @@ class BoxRequest
         $this->reference = $reference;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getIsValidate()
+    {
+        return $this->validate;
+    }
 
+    /**
+     * @param mixed $validate
+     */
+    public function setIsValidate($validate): void
+    {
+        $this->validate = $validate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getisSent()
+    {
+        return $this->is_sent;
+    }
+
+    /**
+     * @param mixed $is_sent
+     */
+    public function setIsSent($is_sent): void
+    {
+        $this->is_sent = $is_sent;
+    }
 
     public function createBoxRequestFromBox(Box $box): self
     {
@@ -183,5 +218,19 @@ class BoxRequest
         $boxRequest->setProducts($box->getProducts());
         $boxRequest->setCurrentPlace($box->getCurrentPlace());
         return $boxRequest;
+    }
+
+    public function isCompleted(){
+        if(
+            !empty($this->getName()) &&
+            !empty($this->getBudget()) &&
+            !empty($this->getReference()) &&
+            !empty($this->getDescription()) &&
+            !empty($this->getProducts())
+        ){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -39,12 +39,15 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
           - { path: ^/admin, roles: [ROLE_ADMIN] }
-          - { path: ^/boxes, roles: [ROLE_PM, ROLE_MO, ROLE_ADMIN] }
-          - { path: ^/box/, roles: [ROLE_PM, ROLE_MO, ROLE_ADMIN] }
+          - { path: ^/boxes, roles: [ROLE_PM, ROLE_MO, ROLE_MM, ROLE_DIRECTOR, ROLE_ADMIN] }
+          - { path: ^/box/, roles: [ROLE_PM, ROLE_MO, ROLE_MM, ROLE_DIRECTOR, ROLE_ADMIN] }
           - { path: ^/box/new, roles: [ROLE_MO, ROLE_ADMIN] }
+          - { path: ^/all-boxes, roles: [ROLE_PM, ROLE_MO, ROLE_MM, ROLE_DIRECTOR, ROLE_ADMIN] }
 
     role_hierarchy:
         ROLE_MO: ROLE_USER
         ROLE_PM: ROLE_USER
+        ROLE_MM: ROLE_MO
+        ROLE_DIRECTOR: ROLE_MM
         ROLE_SUPPLIER: ROLE_USER
-        ROLE_ADMIN: [ROLE_USER, ROLE_PM, ROLE_MO, ROLE_SUPPLIER]
+        ROLE_ADMIN: [ROLE_USER, ROLE_DIRECTOR, ROLE_PM]

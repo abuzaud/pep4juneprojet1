@@ -41,6 +41,16 @@ class BoxRepository extends ServiceEntityRepository
 
     }
 
+    public function findSentBoxes()
+    {
+        return $this->createQueryBuilder('b')
+            ->where("b.currentPlace = :place")
+            ->setParameter('place', 'sent')
+            ->orderBy('b.id', 'ASC')
+            ->getQuery()
+            ->execute();
+    }
+
 //    /**
 //     * @return Box[] Returns an array of Box objects
 //     */
