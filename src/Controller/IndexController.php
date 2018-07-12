@@ -19,11 +19,12 @@ class IndexController extends Controller
      * @Route("/", name="index")
      * @return Response
      */
-    public function index(){
+    public function index()
+    {
         $user = $this->getUser();
 
         return $this->render('index/index.html.twig', [
-            'user' => $user
+                'user' => $user
         ]);
     }
 
@@ -34,11 +35,19 @@ class IndexController extends Controller
      */
     public function admin(AuthorizationCheckerInterface $authChecker)
     {
-        if($authChecker->isGranted('ROLE_ADMIN')){
+        if ($authChecker->isGranted('ROLE_ADMIN')) {
             return $this->render('admin/admin.html.twig');
         } else {
             $this->addFlash('warning', "Vous n'êtes pas connecté en tant qu'administrateur");
             return $this->redirectToRoute('index_login');
         }
+    }
+
+    /**
+     * @Route("/denied_access", name="denied_access")
+     */
+    public function denied_access()
+    {
+        return $this->render('security/denied_access.html.twig');
     }
 }

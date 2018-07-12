@@ -8,7 +8,6 @@ namespace App\Controller\Logger;
 
 
 use App\Entity\Box;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Workflow\Event\Event;
 use Symfony\Component\Workflow\Event\GuardEvent;
@@ -17,7 +16,7 @@ class WorkflowEvents implements EventSubscriberInterface
 {
     private $logger;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(FileLogger $logger)
     {
         $this->logger = $logger;
     }
@@ -29,17 +28,18 @@ class WorkflowEvents implements EventSubscriberInterface
     public function onNewPlace(Event $event)
     {
         $this->logger->alert(sprintf(
-            'La box "#%s" a effectué la transition "%s" depuis "%s" jusqu\'à "%s"',
-            $event->getSubject()->getId(),
-            $event->getTransition()->getName(),
-            implode(', ', array_keys($event->getMarking()->getPlaces())),
-            implode(', ', $event->getTransition()->getTos())
+                'La box "#%d" a effectué la transition "%s" depuis "%s" jusqu\'à "%s"',
+                $event->getSubject()->getId(),
+                $event->getTransition()->getName(),
+                implode(', ', array_keys($event->getMarking()->getPlaces())),
+                implode(', ', $event->getTransition()->getTos())
         ));
     }
 
     /**
      * Ajout de gardien permettant de veiller à ce que
      * la place "add_products" ne puissent être vue si la box n'a aucun budget
+     * @param GuardEvent $event
      */
     public function guardAddProducts(GuardEvent $event)
     {
@@ -47,9 +47,9 @@ class WorkflowEvents implements EventSubscriberInterface
         $box = $event->getSubject();
         $budget = $box->getBudget();
 
-        if(empty($budget)){
+        if (empty($budget)) {
             // On bloque les box sans budget
-            $event->setBlocked(true);
+            $event->setBlocked(TRUE);
         }
     }
 
@@ -61,8 +61,7 @@ class WorkflowEvents implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'workflow.box_making.entered' => 'onNewPlace',
-            'workflow.box_making.add_products' => array('guardAddProducts')
+                'workflow.box_making.entered' => 'onNewPlace'
         );
     }
 }

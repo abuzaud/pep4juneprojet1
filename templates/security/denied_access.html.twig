@@ -1,0 +1,35 @@
+{% extends 'layout.html.twig' %}
+
+{% block page_title %}
+	{{ 'access.denied' | trans }}
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-12">
+
+			<h1 class="text-center">
+				{{ 'access.denied.title' | trans }}
+			</h1>
+
+			<p>
+				{{ 'access.denied.message' | trans }}
+			</p>
+
+			<p>Vous allez être <b>redirigé dans 5 secondes...</b></p>
+
+			<p>
+				TODO : Ajouter un message d'explication pour l'accès refusé.
+			</p>
+		</div>
+	</div>
+{% endblock %}
+
+{% block final_javascripts %}
+	{{ parent() }}
+	<script>
+		window.setTimeout(function() {
+			window.location.href = '/';
+		}, 5000);
+	</script>
+{% endblock %}

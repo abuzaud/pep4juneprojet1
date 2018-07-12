@@ -28,25 +28,31 @@ class BoxProductsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, [
-                'attr' => ['placeholder' => 'Nom', 'disabled' => 'disabled']
-            ])
-            ->add('budget', MoneyType::class, [
-                'attr' => ['placeholder' => 'Budget', 'disabled' => 'disabled']
-            ])
-            ->add('description', TextType::class, [
-                'attr' => ['placeholder' => 'Description', 'disabled' => 'disabled']
-            ])
-            ->add('reference', TextType::class, [
-                'attr' => ['placeholder' => 'Reference', 'disabled' => 'disabled']
-            ])
-            ->add('products', TextType::class, [
-                'attr' => ['placeholder' => 'Liste de produits']
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Valider'
-                ]
-            );
+                ->add('name', TextType::class, [
+                        'disabled' => 'disabled',
+                        'attr' => ['placeholder' => 'Nom', 'required' => TRUE]
+                ])
+                ->add('budget', MoneyType::class, [
+                        'disabled' => 'disabled',
+                        'attr' => ['placeholder' => 'Budget', 'required' => TRUE]
+                ])
+                ->add('description', TextType::class, [
+                        'disabled' => 'disabled',
+                        'required' => FALSE,
+                        'attr' => ['placeholder' => 'Description']
+                ])
+                ->add('reference', TextType::class, [
+                        'disabled' => 'disabled',
+                        'required' => FALSE,
+                        'attr' => ['placeholder' => 'reference']
+                ])
+                ->add('products', TextType::class, [
+                        'label' => 'Liste des produits'
+                ])
+                ->add('submit', SubmitType::class, [
+                                'label' => 'Valider'
+                        ]
+                );
     }
 
     /**
@@ -55,9 +61,9 @@ class BoxProductsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
-            ->setDefaults([
-                'data_class' => BoxRequest::class
-            ]);
+                ->setDefaults([
+                        'data_class' => BoxRequest::class
+                ]);
     }
 
     /**

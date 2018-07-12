@@ -12,7 +12,7 @@
         <div class="col-12">
             <h3>{{ box.name }}</h3>
             <p><a href="{{ path('box_all') }}">{{ 'Revenir à la liste des boxes' | trans }}</a></p>
-            {% if is_granted('ROLE_MO') %}
+            {% if  (is_granted('ROLE_MO') == true) %}
                 <p><a href="{{ path('box_edit', {id:box.id}) }}">Editer la box</a></p>
             {% endif %}
             <table class="table table-hover table-bordered">

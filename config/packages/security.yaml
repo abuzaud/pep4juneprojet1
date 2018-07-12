@@ -2,6 +2,8 @@ security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     encoders:
         App\Entity\User: bcrypt
+
+    access_denied_url: /denied_access
     providers:
         in_memory: { memory: ~ }
         user_provider:
@@ -27,6 +29,7 @@ security:
                 check_path: index_login
                 username_parameter: index_login[email]
                 password_parameter: index_login[password]
+                default_target_path: index
             provider: user_provider
             logout:
                 path: /deconnexion
@@ -38,6 +41,7 @@ security:
           - { path: ^/admin, roles: [ROLE_ADMIN] }
           - { path: ^/boxes, roles: [ROLE_PM, ROLE_MO, ROLE_ADMIN] }
           - { path: ^/box/, roles: [ROLE_PM, ROLE_MO, ROLE_ADMIN] }
+          - { path: ^/box/new, roles: [ROLE_MO, ROLE_ADMIN] }
 
     role_hierarchy:
         ROLE_MO: ROLE_USER

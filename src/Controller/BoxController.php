@@ -14,13 +14,15 @@ use App\Entity\Box;
 use App\Entity\User;
 use App\Form\BoxDescType;
 use App\Form\BoxProductsType;
-use App\Traits\HelperTrait;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Workflow\Registry;
 
 class BoxController extends Controller
@@ -30,11 +32,16 @@ class BoxController extends Controller
      * @param Request $request
      * @param EntityManagerInterface $em
      * @param Registry $workflows
-     * @param AuthorizationCheckerInterface $authChecker
+     * @param Security $security
      * @return Response
      */
-    public function listBoxes(Request $request, EntityManagerInterface $em, Registry $workflows, AuthorizationCheckerInterface $authChecker)
+    public function listBoxes(Request $request, EntityManagerInterface $em, Registry $workflows, Security $security)
     {
+        if(!$security->isGranted(['ROLE_ADMIN']) && !$security->isGranted(['ROLE_MO']) && !$security->isGranted(['ROLE_PM'])) {
+            $this->addFlash('warning', "Vous n'avez pas les droits pour voir les box!");
+            return $this->redirectToRoute('index');
+        }
+
         // On récupère l'utilisateur
         /** @var User $user */
         $user = $this->getUser();
@@ -42,12 +49,12 @@ class BoxController extends Controller
 
         $places = [];
         // On récupère les box suivant le role de l'utilisateur
-        if ($authChecker->isGranted('ROLE_MO')
+        if ($security->isGranted('ROLE_MO')
         ) {
             array_push($places, 'empty', 'desc_incomplete', 'desc_complete');
         }
 
-        if ($authChecker->isGranted('ROLE_PM')) {
+        if ($security->isGranted('ROLE_PM')) {
             array_push($places, 'products_incomplete', 'products_complete', 'validation_box', 'ok_box');
         }
 
@@ -59,24 +66,22 @@ class BoxController extends Controller
 
         // On affiche la page
         return $this->render('boxes/boxes.html.twig', [
-            'boxes' => $boxes,
-            'roles' => $roles
+                'boxes' => $boxes,
+                'roles' => $roles
         ]);
     }
 
     /**
      * @Route("/box/{id}/view", name="box_view", requirements={"id"="\d+"})
      * @param Request $request
-     * @param EntityManagerInterface $em
      * @param $id
-     * @param Registry $workflows
      * @param Box $box
      * @return Response
      */
-    public function viewBox(Request $request, EntityManagerInterface $em, $id, Registry $workflows, Box $box)
+    public function viewBox(Request $request, $id, Box $box)
     {
         return $this->render('boxes/box.html.twig', [
-            'box' => $box
+                'box' => $box
         ]);
     }
 
@@ -87,21 +92,45 @@ class BoxController extends Controller
      *      defaults={"_action" = "description"},
      *      requirements={
      *        "id"="\d+",
-     *        "_action"="description|produits"
+     *        "_action"="description|products|delete"
      *      }
      * )
+     * @Method({"GET", "POST"})
      * @param Request $request
      * @param $_action
      * @param BoxRequest $boxRequest
-     * @param Box $box
      * @param BoxFactory $boxFactory
      * @param EntityManagerInterface $em
      * @param Registry $workflows
+     * @param Box $box
      * @return Response
      */
     public function editBox(Request $request, $_action, BoxRequest $boxRequest,
-                            Box $box, BoxFactory $boxFactory, EntityManagerInterface $em, Registry $workflows)
+                            BoxFactory $boxFactory, EntityManagerInterface $em, Registry $workflows, Box $box, Security $security)
     {
+
+        if(!$security->isGranted(['ROLE_ADMIN']) && !$security->isGranted(['ROLE_MO'])){
+            $this->addFlash('warning', "Vous n'avez pas les droits pour modifier les box !");
+            return $this->redirectToRoute('box_all');
+        }
+
+        // On supprime la box, si on le demande
+        if ($_action === 'delete') {
+            $tmpBox = $box;
+            //On supprime la box
+            $em->remove($box);
+            // On supprime en base
+            $em->flush();
+
+            //On affiche une notification
+            $options= array($tmpBox->getId(), $tmpBox->getName());
+            $message = vsprintf("La box [#%u] '%s' a été supprimé !", $options);
+//            $message = 'La box a été supprimé !';
+            $this->addFlash('notice', $message);
+            return $this->redirectToRoute('box_all');
+        }
+
+        // On récupère le workflow de la box
         $workflow = $workflows->get($box, 'box_making');
 
         // On créé une $boxRequest pour le traitement des données
@@ -109,7 +138,7 @@ class BoxController extends Controller
 
         // On affiche un formulaire différent suivant si on est
         // à l'édition de la description ou l'ajout de produits
-        if ($_action === 'produits') {
+        if ($_action == 'products') {
             $formType = BoxProductsType::class;
             $workflow_place = 'products_incomplete';
         } else {
@@ -119,7 +148,7 @@ class BoxController extends Controller
 
         // On créé le formulaire
         $form = $this->createForm($formType, $boxRequest)
-            ->handleRequest($request);
+                ->handleRequest($request);
 
         // Soumissions du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
@@ -127,7 +156,7 @@ class BoxController extends Controller
             if ($workflow_place === 'add_desc_box') {
                 // Si la description de la box est incomplète
                 if (empty($boxRequest->getDescription()) ||
-                    empty($boxRequest->getReference())
+                        empty($boxRequest->getReference())
                 ) {
                     $workflow->apply($box, 'desc_incomplete');
 
@@ -159,9 +188,9 @@ class BoxController extends Controller
         }
 
         return $this->render('boxes/box_edit.html.twig', [
-            'box' => $box,
-            'form' => $form->createView(),
-            'workflow_place' => $workflow_place
+                'box' => $box,
+                'form' => $form->createView(),
+                'workflow_place' => $workflow_place
         ]);
     }
 
@@ -173,14 +202,20 @@ class BoxController extends Controller
      * @param Registry $workflows
      * @return Response
      */
-    public function addBox(Request $request, EntityManagerInterface $em, BoxRequestHandler $boxRequestHandler, Registry $workflows)
+    public function addBox(Request $request, EntityManagerInterface $em, BoxRequestHandler $boxRequestHandler, Registry $workflows, Security $security)
     {
+        dump($security->isGranted('ROLE_MO'));
+        if(!$security->isGranted('ROLE_MO')){
+            $this->addFlash('warning', "Vous n'avez pas les droits pour ajouter une boite !");
+            return $this->redirectToRoute('box_all');
+        }
+
         // Création de l'objet
         $box = new BoxRequest();
 
         // Création du formulaire
         $form = $this->createForm(BoxDescType::class, $box)
-            ->handleRequest($request);
+                ->handleRequest($request);
 
         // Vérification des données du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
@@ -206,8 +241,8 @@ class BoxController extends Controller
 
 
         return $this->render('boxes/box_new.html.twig', [
-            'box' => $box,
-            'form' => $form->createView()
+                'box' => $box,
+                'form' => $form->createView()
         ]);
     }
 
