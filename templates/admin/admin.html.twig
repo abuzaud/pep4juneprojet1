@@ -1,5 +1,5 @@
 {% extends "layout.html.twig" %}
-
+{% trans_default_domain 'admin' %}
 {% set active = 'admin' %}
 
 {% block page_title %}
@@ -9,7 +9,7 @@
 {% block content %}
     <div class="row">
         <div class="col-12">
-            <h1 class="text-center">Admin</h1>
+            <h1 class="text-center">{{ admin.title | trans }}</h1>
         </div>
     </div>
 {% endblock %}

@@ -1,0 +1,3 @@
+access.denied: 'Cet accès vous est refusé'
+access.denied.title: 'Accès refusé'
+access.denied.message: 'Vous n''avez pas les droits suffisant'

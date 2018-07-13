@@ -9,7 +9,7 @@
 {% block content %}
     <div class="row">
         <div class="col-12">
-            <h3>{{ 'Liste des box' | trans }}</h3>
+            <h3>{{ 'box.list.title' | trans }}</h3>
 
             <table class="table table-hover table-bordered">
                 <thead class="thead-dark">
@@ -18,10 +18,10 @@
                         <th scope="col"></th>
                     {% endif %}
                     <th scope="col">#</th>
-                    <th scope="col">Nom</th>
-                    <th scope="col">Budget</th>
-                    <th scope="col">Produits</th>
-                    <th scope="col">Etat</th>
+                    <th scope="col">{{ 'table.name' | trans }}</th>
+                    <th scope="col">{{ 'table.budget' | trans }}</th>
+                    <th scope="col">{{ 'table.products' | trans }}</th>
+                    <th scope="col">{{ 'table.state' | trans }}</th>
                     <th scope="col"></th>
                 </tr>
                 </thead>
@@ -43,19 +43,19 @@
                             <th class="text-center">
                                 <div>
                                     <a href="{{ path('box_edit', {id:box.id}) }}">
-                                        {{ 'Editer' | trans }}
+                                        {{ 'link.edit' | trans }}
                                     </a>
                                 </div>
                                 <div>
                                     <a href="{{ path('box_view', {id:box.id}) }}">
-                                        {{ 'Voir' | trans }}
+                                        {{ 'link.view' | trans }}
                                     </a>
                                 </div>
                             </th>
                         {% else %}
                             <th>
                                 <a href="{{ path('box_view', {id:box.id}) }}">
-                                    {{ 'Voir' | trans }}
+                                    {{ 'link.view' | trans }}
                                 </a>
                             </th>
                         {% endif %}
@@ -64,7 +64,7 @@
                 </tbody>
             </table>
 
-            <h3>{{ 'Liste des box expédiées' | trans }}</h3>
+            <h3>{{ 'box.sent.title' | trans }}</h3>
             {% if sentBoxes is not empty %}
                 <table class="table table-hover table-bordered">
                     <thead class="thead-dark">
@@ -87,7 +87,7 @@
                             <th scope="row">{{ box.currentPlace }}</th>
                             <th scope="row" class="text-center">
                                 <a href="{{ path('box_view', {id:box.id}) }}">
-                                    {{ 'Voir' | trans }}
+                                    {{ 'link.view' | trans }}
                                 </a>
                             </th>
                         </tr>

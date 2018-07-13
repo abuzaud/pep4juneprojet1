@@ -1,0 +1,10 @@
+boxes.title: 'Box du worklow'
+box.list.title: 'Box du workflow'
+table.name: Nom
+table.budget: Budget
+table.products: Produits
+table.state: Etat
+link.edit: Editer
+link.view: Voir
+box.sent.title: 'Box expediées'
+Voir: Voir

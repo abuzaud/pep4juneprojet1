@@ -1,3 +1,4 @@
+{% trans_default_domain 'nav' %}
 <div class="container">
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
@@ -7,7 +8,7 @@
 		<div class="collapse navbar-collapse" id="navbarNavDropdown">
 			<ul class="navbar-nav">
 				<li class="nav-item active">
-					<a class="nav-link" href="{{ path('index') }}">Accueil<span class="sr-only">(current)</span></a>
+					<a class="nav-link" href="{{ path('index') }}">{{ 'accueil' | trans }}<span class="sr-only">(current)</span></a>
 				</li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
@@ -15,26 +16,26 @@
 						Box
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-						<a class="dropdown-item" href="{{ path('listboxes') }}">Voir toutes les box</a>
-						<a class="dropdown-item" href="{{ path('box_all') }}">Box de mon workflow</a>
+						<a class="dropdown-item" href="{{ path('listboxes') }}">{{ 'all.boxes.view' | trans  }}</a>
+						<a class="dropdown-item" href="{{ path('box_all') }}">{{ 'boxes.title' | trans  }}</a>
 						{% if is_granted('ROLE_MO') %}
-							<a class="dropdown-item" href="{{ path('box_add') }}">Nouvelle box</a>
+							<a class="dropdown-item" href="{{ path('box_add') }}">{{ 'box.new' | trans  }}</a>
 						{% endif %}
 					</div>
 				</li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
 					   aria-haspopup="true" aria-expanded="false">
-						Mon compte
+						{{ 'account' | trans  }}
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-						<a class="dropdown-item" href="{{ path('index_login') }}">Connexion</a>
-						<a class="dropdown-item" href="{{ path('logout') }}">Déconnexion</a>
-						<a class="dropdown-item" href="{{ path('register_user') }}">Créer un compte</a>
+						<a class="dropdown-item" href="{{ path('index_login') }}">{{ 'login' | trans  }}</a>
+						<a class="dropdown-item" href="{{ path('logout') }}">{{ 'logout' | trans  }}</a>
+						<a class="dropdown-item" href="{{ path('register_user') }}">{{ 'account.new' | trans  }}</a>
 					</div>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="{{ path('admin') }}">Admin</a>
+					<a class="nav-link" href="{{ path('admin') }}">{{ 'admin' | trans  }}</a>
 				</li>
 			</ul>
 		</div>

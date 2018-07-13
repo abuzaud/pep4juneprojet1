@@ -1,5 +1,5 @@
 {% extends 'layout.html.twig' %}
-{% trans_default_domain 'workflow' %}
+{% trans_default_domain 'box_new' %}
 
 {% set active = 'workflow' %}
 
@@ -8,8 +8,8 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ 'Ajout d\'une nouvelle box' | trans }}</h1>
-    <p><a href="{{ path('box_all') }}">{{ 'Revenir à la liste des boxes' | trans }}</a></p>
+    <h1>{{ 'title.h1' | trans }}</h1>
+    <p><a href="{{ path('box_all') }}">{{ 'link.boxall' | trans }}</a></p>
     {{ form(form) }}
 {% endblock %}
 

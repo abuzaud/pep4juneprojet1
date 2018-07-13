@@ -18,39 +18,39 @@ class UserType extends AbstractType
     {
         $builder
             ->add('firstName', TextType::class, [
-                'label' => 'form.register.firstname',
+                'label' => 'Prénom',
                 'attr' => [
-                    'placeholder' => 'form.placeholder.firstname'
+                    'placeholder' => 'Veuillez saisir votre prénom'
                 ]
             ])
             ->add('lastName', TextType::class, [
-                'label' => 'form.register.lastname',
+                'label' => 'Nom de famille',
                 'attr' => [
-                    'placeholder' => 'form.placeholder.lastname'
+                    'placeholder' => 'Veuillez saisir votre nom de famille'
                 ]
             ])
             ->add('email', EmailType::class, [
-                'label' => 'form.register.email',
+                'label' => 'Email',
                 'attr' => [
-                    'placeholder' => 'form.placeholder.email'
+                    'placeholder' => 'Veuillez saisir votre email'
                 ]
             ])
             ->add('password', PasswordType::class, [
-                'label' => 'form.register.password',
+                'label' => 'Mot de passe',
                 'attr' => [
-                    'placeholder' => 'form.placeholder.password'
+                    'placeholder' => '********'
                 ]
             ])
             ->add('conditions', CheckboxType::class, [
-                'label' => "form.register.cgu",
+                'label' => "Accepter les CGU",
                 'attr' => [
                     'data-toggle' => 'toggle',
-                    'data-on' => 'form.register.cgu.on',
-                    'data-off' => 'form.register.cgu.off'
+                    'data-on' => 'Oui',
+                    'data-off' => 'Non'
                 ]
             ])
             ->add('submit', SubmitType::class, [
-                'label' => "form.register.submit"
+                'label' => "S'inscrire"
             ]);
     }
 

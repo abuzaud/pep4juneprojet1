@@ -1,0 +1,13 @@
+link.allbox: 'Revenir à la liste des boxes'
+box.edit: 'Editer la box'
+table.id: ID
+table.name: Nom
+table.budget: Budget
+table.products: Produits
+table.state: Etat
+box.sent.notice: 'Cette box a été expédiée auprès de nos clients.'
+box.validate: 'Valider le contenu de la box'
+box.revision: 'Demander une révision des produits de la box'
+box.production: 'Demander la mise en production de la box'
+box.delete: 'Supprimer la box'
+box.sending: 'Ordonner l''expédition de la box'

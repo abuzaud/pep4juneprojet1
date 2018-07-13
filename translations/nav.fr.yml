@@ -1,0 +1,9 @@
+accueil: Accueil
+all.boxes.view: 'Voir toutes les box'
+boxes.title: 'Box de mon workflow'
+box.new: 'Nouvelle box'
+account: 'Mon compte'
+login: Connexion
+logout: Déconnexion
+account.new: 'Créer un compte'
+admin: Admin
